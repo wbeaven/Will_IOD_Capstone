@@ -2,8 +2,8 @@ import { Router } from "express";
 import {
     getUsers,
     createUser,
-    // updateUser,
-    // deleteUser,
+    updateUser,
+    deleteUser,
     // getMe
 } from "../controllers/userController";
 
@@ -13,7 +13,7 @@ router.get("/", getUsers);
 router.post("/", async (req, res) => {
     await createUser(req, res);
 });
-// router.put("/:id", updateUser);
-// router.delete("/:id", deleteUser);
+router.put("/:id", updateUser);
+router.delete("/:id", deleteUser);
 
 export default router;

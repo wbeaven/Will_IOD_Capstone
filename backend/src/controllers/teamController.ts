@@ -1,34 +1,34 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 
-import { userModel, IUser } from "../models/userModel";
+import { teamModel, ITeam } from "../models/teamModel";
 
-export const getUsers = (req: Request, res: Response) => {
-    userModel
+export const getTeams = (req: Request, res: Response) => {
+    teamModel
         .find({})
-        .then((data: IUser[]) => res.send({ result: 200, data: data }))
+        .then((data: ITeam[]) => res.send({ result: 200, data: data }))
         .catch((err: any) => {
             console.log(err);
             res.send({ result: 500, error: err.message });
         });
 };
 
-export const createUser = async (req: Request, res: Response) => {
+export const createTeam = async (req: Request, res: Response) => {
     try {
-        const data: IUser = req.body;
-        if (!data.password) {
-            return res.status(400).send({ result: 400, error: "Password is required" });
+        const data: ITeam = req.body;
+        if (!data.teamName) {
+            return res.status(400).send({ result: 400, error: "Team name is required" });
         }
-        const newUser = await new userModel(data).save();
-        res.send({ result: 200, data: newUser });
+        const newTeam = await new teamModel(data).save();
+        res.send({ result: 200, data: newTeam });
     } catch (err: any) {
         console.log(err);
         res.send({ result: 500, error: err.message });
     }
 };
 
-export const updateUser = (req: Request, res: Response) => {
-    userModel
+export const updateTeam = (req: Request, res: Response) => {
+    teamModel
         .findByIdAndUpdate(req.params.id, req.body, {
             new: true,
         })
@@ -39,8 +39,8 @@ export const updateUser = (req: Request, res: Response) => {
         });
 };
 
-export const deleteUser = (req: Request, res: Response) => {
-    userModel
+export const deleteTeam = (req: Request, res: Response) => {
+    teamModel
         .findByIdAndDelete(req.params.id)
         .then((data) => res.send({ result: 200, data: data }))
         .catch((err) => {
