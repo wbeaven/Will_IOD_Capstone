@@ -1,10 +1,10 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
+// import Checkbox from "@mui/material/Checkbox";
 import CssBaseline from "@mui/material/CssBaseline";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Divider from "@mui/material/Divider";
+// import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
 import Link from "@mui/material/Link";
@@ -16,6 +16,7 @@ import { styled } from "@mui/material/styles";
 import ForgotPassword from "../components/ForgotPassword";
 import AppTheme from "../shared-theme/AppTheme";
 import ColorModeSelect from "../shared-theme/ColorModeSelect";
+import { useNavigate } from "react-router";
 
 const Card = styled(MuiCard)(({ theme }) => ({
     display: "flex",
@@ -113,13 +114,14 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
         return isValid;
     };
 
+    const navigate = useNavigate();
+
     return (
         <AppTheme {...props}>
             <CssBaseline enableColorScheme />
             <SignInContainer direction='column' justifyContent='space-between'>
                 <ColorModeSelect sx={{ position: "fixed", top: "1rem", right: "1rem" }} />
                 <Card variant='outlined'>
-                    {/* <SitemarkIcon /> */}
                     <Typography
                         component='h1'
                         variant='h4'
@@ -170,10 +172,10 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
                                 color={passwordError ? "error" : "primary"}
                             />
                         </FormControl>
-                        <FormControlLabel
+                        {/* <FormControlLabel
                             control={<Checkbox value='remember' color='primary' />}
                             label='Remember me'
-                        />
+                        /> */}
                         <ForgotPassword open={open} handleClose={handleClose} />
                         <Button
                             type='submit'
@@ -182,20 +184,24 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
                             onClick={validateInputs}>
                             Sign in
                         </Button>
-                        <Link
+                        {/* <Link
                             component='button'
                             type='button'
                             onClick={handleClickOpen}
                             variant='body2'
                             sx={{ alignSelf: "center" }}>
                             Forgot your password?
-                        </Link>
+                        </Link> */}
                     </Box>
                     <Divider>or</Divider>
                     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                         <Typography sx={{ textAlign: "center" }}>
                             Don&apos;t have an account?{" "}
-                            <Link href='/signup' variant='body2' sx={{ alignSelf: "center" }}>
+                            <Link
+                                component={"button"}
+                                onClick={() => navigate("/signUp")}
+                                variant='body2'
+                                sx={{ alignSelf: "center", textDecorationLine: "underline" }}>
                                 Sign up
                             </Link>
                         </Typography>

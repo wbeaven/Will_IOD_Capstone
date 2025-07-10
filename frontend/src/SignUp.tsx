@@ -13,6 +13,7 @@ import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 import AppTheme from "../shared-theme/AppTheme";
 import ColorModeSelect from "../shared-theme/ColorModeSelect";
+import { useNavigate } from "react-router";
 
 const Card = styled(MuiCard)(({ theme }) => ({
     display: "flex",
@@ -67,6 +68,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
     const validateInputs = () => {
         const email = document.getElementById("email") as HTMLInputElement;
         const password = document.getElementById("password") as HTMLInputElement;
+        // const passwordConfirm = document.getElementById("passwordConfirm") as HTMLInputElement;
         const username = document.getElementById("username") as HTMLInputElement;
 
         let isValid = true;
@@ -84,7 +86,13 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
             setPasswordError(true);
             setPasswordErrorMessage("Password must be at least 6 characters long.");
             isValid = false;
-        } else {
+        }
+        // else if (password.value !== passwordConfirm.value) {
+        //     setPasswordError(true);
+        //     setPasswordErrorMessage("Password does not match.");
+        //     isValid = false;
+        // }
+        else {
             setPasswordError(false);
             setPasswordErrorMessage("");
         }
@@ -101,19 +109,43 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
         return isValid;
     };
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    //     if (usernameError || emailError || passwordError) {
+    //         event.preventDefault();
+    //         return;
+    //     }
+    //     const data = new FormData(event.currentTarget);
+    //     console.log({
+    //         username: data.get("username"),
+    //         email: data.get("email"),
+    //         password: data.get("password"),
+    //     });
+    // };
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
         if (usernameError || emailError || passwordError) {
-            event.preventDefault();
             return;
         }
         const data = new FormData(event.currentTarget);
-        console.log({
-            name: data.get("name"),
-            lastName: data.get("lastName"),
-            email: data.get("email"),
-            password: data.get("password"),
-        });
+        console.log("posted form data: " + JSON.stringify(Object.fromEntries(data)));
+        let fetchData = {
+            method: "POST",
+            body: JSON.stringify(Object.fromEntries(data)),
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8",
+            }),
+        };
+        try {
+            await fetch("http://localhost:8080/users", fetchData)
+                .then((response) => response.json())
+                .then((json) => console.log(json));
+            navigate("/dashboard/profile");
+        } catch (err) {
+            console.error("Error: ", err);
+        }
     };
+
+    const navigate = useNavigate();
 
     return (
         <AppTheme {...props}>
@@ -121,7 +153,6 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
             <ColorModeSelect sx={{ position: "fixed", top: "1rem", right: "1rem" }} />
             <SignUpContainer direction='column' justifyContent='space-between'>
                 <Card variant='outlined'>
-                    {/* <SitemarkIcon /> */}
                     <Typography
                         component='h1'
                         variant='h4'
@@ -177,22 +208,21 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
                                 color={passwordError ? "error" : "primary"}
                             />
                         </FormControl>
-                        <FormControl>
-                            <FormLabel htmlFor='password'>Confirm Password</FormLabel>
+                        {/* <FormControl>
+                            <FormLabel>Confirm Password</FormLabel>
                             <TextField
                                 required
                                 fullWidth
-                                name='password'
-                                placeholder='••••••'
+                                name='passwordConfirm'
+                                placeholder='confirm password'
                                 type='password'
-                                id='password'
-                                autoComplete='new-password'
+                                id='passwordConfirm'
                                 variant='outlined'
                                 error={passwordError}
                                 helperText={passwordErrorMessage}
                                 color={passwordError ? "error" : "primary"}
                             />
-                        </FormControl>
+                        </FormControl> */}
                         <Button
                             type='submit'
                             fullWidth
@@ -207,7 +237,11 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
                     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                         <Typography sx={{ textAlign: "center" }}>
                             Already have an account?{" "}
-                            <Link href='/signin' variant='body2' sx={{ alignSelf: "center" }}>
+                            <Link
+                                component={"button"}
+                                onClick={() => navigate("/signIn")}
+                                variant='body2'
+                                sx={{ alignSelf: "center", textDecorationLine: "underline" }}>
                                 Sign in
                             </Link>
                         </Typography>
