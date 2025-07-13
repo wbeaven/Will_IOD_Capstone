@@ -1,13 +1,13 @@
 import { Document, Schema, model, Types } from "mongoose";
 
 export interface IUser extends Document {
-    username: String;
-    email: String;
-    password: String;
-    description: String;
-    roles: [];
-    screenshots: [];
-    teams: [];
+    username: string;
+    email: string;
+    password: string;
+    description: string;
+    roles: string[];
+    screenshots: any[]; // or a proper interface if you have one
+    teams: Types.ObjectId[];
     createdAt: Date;
     updatedAt: Date;
 }

@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import userRoute from "./routes/userRoute";
 import teamRoute from "./routes/teamRoute";
+import authRoute from "./routes/authRoute";
 require("./dbConnect");
 
 const app = express();
@@ -15,6 +16,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/users", userRoute);
 app.use("/teams", teamRoute);
+app.use("/auth", authRoute);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);

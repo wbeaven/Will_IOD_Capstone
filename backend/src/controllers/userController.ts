@@ -3,6 +3,12 @@ import bcrypt from "bcrypt";
 
 import { userModel, IUser } from "../models/userModel";
 
+interface IUserCreateInput {
+    username: string;
+    password: string;
+    email?: string;
+}
+
 export const getUsers = (req: Request, res: Response) => {
     userModel
         .find({})
@@ -15,10 +21,11 @@ export const getUsers = (req: Request, res: Response) => {
 
 export const createUser = async (req: Request, res: Response) => {
     try {
-        const data: IUser = req.body;
+        const data: IUserCreateInput = req.body;
         if (!data.password) {
             return res.status(400).send({ result: 400, error: "Password is required" });
         }
+        data.password = await bcrypt.hash(data.password, 10);
         const newUser = await new userModel(data).save();
         res.send({ result: 200, data: newUser });
     } catch (err: any) {

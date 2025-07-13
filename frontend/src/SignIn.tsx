@@ -67,24 +67,12 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
     const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
     const [open, setOpen] = React.useState(false);
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
+    // const handleClickOpen = () => {
+    //     setOpen(true);
+    // };
 
     const handleClose = () => {
         setOpen(false);
-    };
-
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        if (emailError || passwordError) {
-            event.preventDefault();
-            return;
-        }
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get("email"),
-            password: data.get("password"),
-        });
     };
 
     const validateInputs = () => {
@@ -112,6 +100,30 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
         }
 
         return isValid;
+    };
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        if (emailError || passwordError) {
+            return;
+        }
+        const data = new FormData(event.currentTarget);
+        console.log("posted form data: " + JSON.stringify(Object.fromEntries(data)));
+        let fetchData = {
+            method: "GET",
+            body: JSON.stringify(Object.fromEntries(data)),
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8",
+            }),
+        };
+        try {
+            await fetch("http://localhost:8080/auth", fetchData)
+                .then((response) => response.json())
+                .then((json) => console.log(json));
+            navigate(`/dashboard/${fetchData.body}`);
+        } catch (err) {
+            console.error("Error: ", err);
+        }
     };
 
     const navigate = useNavigate();

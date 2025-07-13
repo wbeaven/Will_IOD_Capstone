@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
 
-const uri =
-    process.env.MONGO_URI ||
-    "mongodb+srv://wtbeaven:nOb2Nme0zajQu27A@will-dev-cluster.7wtvy0y.mongodb.net/?retryWrites=true&w=majority&appName=will-dev-cluster";
+const uri = process.env.MONGO_URI || "mongodb://localhost:27017";
 
 const mongoConnect = async () => {
     await mongoose
