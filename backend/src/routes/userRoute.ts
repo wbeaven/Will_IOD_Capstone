@@ -4,6 +4,7 @@ import {
     createUser,
     updateUser,
     deleteUser,
+    getOneUser,
     // getMe
 } from "../controllers/userController";
 import { verifyJWT } from "../middleware/verifyAuth";
@@ -16,5 +17,6 @@ router.post("/", async (req, res) => {
 });
 router.put("/:id", verifyJWT, updateUser);
 router.delete("/:id", verifyJWT, deleteUser);
+router.get("/:id", verifyJWT, getOneUser);
 
 export default router;

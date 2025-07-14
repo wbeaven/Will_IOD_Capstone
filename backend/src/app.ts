@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import userRoute from "./routes/userRoute";
 import teamRoute from "./routes/teamRoute";
 import authRoute from "./routes/authRoute";
@@ -8,6 +9,7 @@ require("./dbConnect");
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 const PORT = 8080;
 
 app.get("/", (req: Request, res: Response) => {

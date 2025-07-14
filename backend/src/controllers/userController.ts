@@ -56,12 +56,18 @@ export const deleteUser = (req: Request, res: Response) => {
         });
 };
 
-// export const getMe = (req: AuthenticatedRequest, res: Response): void => {
-//     if (!req.user) {
-//         res.status(401).json({ message: "Not authenticated" });
-//         return;
-//     }
-//     const userObj = typeof req.user.toObject === "function" ? req.user.toObject() : req.user;
-//     if (userObj.password) delete userObj.password;
-//     res.json(userObj);
-// };
+export const getOneUser = (req: Request, res: Response): void => {
+    userModel
+        .findById(req.params.id)
+        .then((data: IUser | null) => {
+            if (!data) {
+                res.status(404).send({ result: 404, error: "User not found" });
+                return;
+            }
+            res.send({ result: 200, data });
+        })
+        .catch((err: any) => {
+            console.log(err);
+            res.send({ result: 500, error: err.message });
+        });
+};

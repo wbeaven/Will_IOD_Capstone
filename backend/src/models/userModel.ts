@@ -6,8 +6,9 @@ export interface IUser extends Document {
     password: string;
     description: string;
     roles: string[];
-    screenshots: any[]; // or a proper interface if you have one
+    screenshots: any[];
     teams: Types.ObjectId[];
+    refreshToken?: string;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -51,6 +52,9 @@ const userSchema = new Schema<IUser>(
                 ref: "team",
             },
         ],
+        refreshToken: {
+            type: String,
+        },
         createdAt: {
             type: Date,
             default: Date.now,

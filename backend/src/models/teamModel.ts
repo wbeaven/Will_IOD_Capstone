@@ -1,13 +1,13 @@
 import { Document, Schema, model, Types } from "mongoose";
 
 export interface ITeam extends Document {
-    teamName: String;
-    jamName: String;
-    description: String;
-    members: [];
-    filledRoles: [];
-    availableRoles: [];
-    admin: Schema.Types.ObjectId;
+    teamName: string;
+    jamName: string;
+    description: string;
+    members: Types.ObjectId[];
+    filledRoles: string[];
+    availableRoles: string[];
+    admin: Types.ObjectId;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -28,28 +28,22 @@ const teamSchema = new Schema<ITeam>(
         },
         members: [
             {
-                userId: {
-                    type: Types.ObjectId,
-                    ref: "user",
-                },
+                type: Schema.Types.ObjectId,
+                ref: "user",
             },
         ],
         filledRoles: [
             {
-                role: {
-                    type: String,
-                },
+                type: String,
             },
         ],
         availableRoles: [
             {
-                role: {
-                    type: String,
-                },
+                type: String,
             },
         ],
         admin: {
-            type: Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: "user",
         },
         createdAt: {

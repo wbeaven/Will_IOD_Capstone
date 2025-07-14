@@ -110,7 +110,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
         const data = new FormData(event.currentTarget);
         console.log("posted form data: " + JSON.stringify(Object.fromEntries(data)));
         let fetchData = {
-            method: "GET",
+            method: "POST",
             body: JSON.stringify(Object.fromEntries(data)),
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
@@ -120,7 +120,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
             await fetch("http://localhost:8080/auth", fetchData)
                 .then((response) => response.json())
                 .then((json) => console.log(json));
-            navigate(`/dashboard/${fetchData.body}`);
+            navigate(`/dashboard`);
         } catch (err) {
             console.error("Error: ", err);
         }
