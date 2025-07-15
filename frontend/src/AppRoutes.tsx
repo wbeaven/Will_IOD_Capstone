@@ -11,7 +11,7 @@ export function AppRoutes() {
         <Routes>
             <Route path='signIn' element={<SignIn />} />
             <Route path='signUp' element={<SignUp />} />
-            <Route path='dashboard' element={<WorkInProgress />}>
+            <Route path='dashboard' element={<ResponsiveDrawer />}>
                 <Route path='profile' element={<WorkInProgress />} />
                 <Route path='team' element={<WorkInProgress />} />
             </Route>

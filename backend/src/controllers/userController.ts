@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 
 import { userModel, IUser } from "../models/userModel";
+import { AuthenticatedRequest } from "../middleware/verifyJWT";
 
 interface IUserCreateInput {
     username: string;
@@ -56,18 +57,43 @@ export const deleteUser = (req: Request, res: Response) => {
         });
 };
 
-export const getOneUser = (req: Request, res: Response): void => {
-    userModel
-        .findById(req.params.id)
-        .then((data: IUser | null) => {
-            if (!data) {
-                res.status(404).send({ result: 404, error: "User not found" });
-                return;
-            }
-            res.send({ result: 200, data });
-        })
-        .catch((err: any) => {
-            console.log(err);
-            res.send({ result: 500, error: err.message });
-        });
+// export const getOneUser = (req: Request, res: Response): void => {
+//     userModel
+//         .findById(req.params.id)
+//         .then((data: IUser | null) => {
+//             if (req.params.id !== req.user?.userId.toString()) {
+//                 res.status(403).json({ error: "Unauthorized" });
+//                 return;
+//             }
+//             if (!data) {
+//                 res.status(404).send({ result: 404, error: "User not found" });
+//                 return;
+//             }
+//             res.send({ result: 200, data });
+//         })
+//         .catch((err: any) => {
+//             console.log(err);
+//             res.send({ result: 500, error: err.message });
+//         });
+// };
+
+export const getOneUser = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+    try {
+        console.log("request id: ", req.params.id);
+        console.log("user id: ", req.user?.userId.toString());
+        if (req.params.id !== req.user?.userId.toString()) {
+            res.status(403).json({ error: "Unauthorized" });
+            return;
+        }
+
+        const user = await userModel.findById(req.params.id);
+        if (!user) {
+            res.status(404).json({ error: "User not found" });
+            return;
+        }
+
+        res.json({ result: 200, data: user });
+    } catch (err: any) {
+        res.status(500).json({ error: err.message });
+    }
 };

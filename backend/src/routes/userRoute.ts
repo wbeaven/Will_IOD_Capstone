@@ -5,18 +5,18 @@ import {
     updateUser,
     deleteUser,
     getOneUser,
-    // getMe
 } from "../controllers/userController";
-import { verifyJWT } from "../middleware/verifyAuth";
+import { verifyAuth } from "../middleware/verifyAuth";
+import { verifyJWT } from "../middleware/verifyJWT";
 
 const router = Router();
 
-router.get("/", verifyJWT, getUsers);
+router.get("/", verifyAuth, getUsers);
 router.post("/", async (req, res) => {
     await createUser(req, res);
 });
-router.put("/:id", verifyJWT, updateUser);
-router.delete("/:id", verifyJWT, deleteUser);
+router.put("/:id", verifyAuth, updateUser);
+router.delete("/:id", verifyAuth, deleteUser);
 router.get("/:id", verifyJWT, getOneUser);
 
 export default router;

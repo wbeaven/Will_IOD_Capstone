@@ -68,7 +68,6 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
     const validateInputs = () => {
         const email = document.getElementById("email") as HTMLInputElement;
         const password = document.getElementById("password") as HTMLInputElement;
-        // const passwordConfirm = document.getElementById("passwordConfirm") as HTMLInputElement;
         const username = document.getElementById("username") as HTMLInputElement;
 
         let isValid = true;
@@ -86,13 +85,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
             setPasswordError(true);
             setPasswordErrorMessage("Password must be at least 6 characters long.");
             isValid = false;
-        }
-        // else if (password.value !== passwordConfirm.value) {
-        //     setPasswordError(true);
-        //     setPasswordErrorMessage("Password does not match.");
-        //     isValid = false;
-        // }
-        else {
+        } else {
             setPasswordError(false);
             setPasswordErrorMessage("");
         }
@@ -109,18 +102,6 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
         return isValid;
     };
 
-    // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    //     if (usernameError || emailError || passwordError) {
-    //         event.preventDefault();
-    //         return;
-    //     }
-    //     const data = new FormData(event.currentTarget);
-    //     console.log({
-    //         username: data.get("username"),
-    //         email: data.get("email"),
-    //         password: data.get("password"),
-    //     });
-    // };
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (usernameError || emailError || passwordError) {
@@ -208,21 +189,6 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
                                 color={passwordError ? "error" : "primary"}
                             />
                         </FormControl>
-                        {/* <FormControl>
-                            <FormLabel>Confirm Password</FormLabel>
-                            <TextField
-                                required
-                                fullWidth
-                                name='passwordConfirm'
-                                placeholder='confirm password'
-                                type='password'
-                                id='passwordConfirm'
-                                variant='outlined'
-                                error={passwordError}
-                                helperText={passwordErrorMessage}
-                                color={passwordError ? "error" : "primary"}
-                            />
-                        </FormControl> */}
                         <Button
                             type='submit'
                             fullWidth

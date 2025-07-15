@@ -13,17 +13,9 @@ export type TokenPayload = {
 };
 
 export const generateAccessToken = (payload: TokenPayload): string => {
-    return jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: "1m" });
+    return jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: "15m" });
 };
 
 export const generateRefreshToken = (payload: TokenPayload): string => {
     return jwt.sign(payload, REFRESH_TOKEN_SECRET, { expiresIn: "1d" });
 };
-
-// export const verifyAccessToken = (token: string): TokenPayload => {
-//     return jwt.verify(token, ACCESS_TOKEN_SECRET) as TokenPayload;
-// };
-
-// export const verifyRefreshToken = (token: string): TokenPayload => {
-//     return jwt.verify(token, REFRESH_TOKEN_SECRET) as TokenPayload;
-// };

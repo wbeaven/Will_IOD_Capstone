@@ -8,7 +8,7 @@ export interface AuthenticatedRequest extends Request {
     user?: String;
 }
 
-export const verifyJWT = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
+export const verifyAuth = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
     const authHeader = req.headers["authorization"];
     if (!authHeader) {
         res.sendStatus(401);

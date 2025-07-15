@@ -1,10 +1,8 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-// import Checkbox from "@mui/material/Checkbox";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
-// import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
 import Link from "@mui/material/Link";
@@ -66,10 +64,6 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
     const [passwordError, setPasswordError] = React.useState(false);
     const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
     const [open, setOpen] = React.useState(false);
-
-    // const handleClickOpen = () => {
-    //     setOpen(true);
-    // };
 
     const handleClose = () => {
         setOpen(false);
@@ -184,10 +178,6 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
                                 color={passwordError ? "error" : "primary"}
                             />
                         </FormControl>
-                        {/* <FormControlLabel
-                            control={<Checkbox value='remember' color='primary' />}
-                            label='Remember me'
-                        /> */}
                         <ForgotPassword open={open} handleClose={handleClose} />
                         <Button
                             type='submit'
@@ -196,14 +186,6 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
                             onClick={validateInputs}>
                             Sign in
                         </Button>
-                        {/* <Link
-                            component='button'
-                            type='button'
-                            onClick={handleClickOpen}
-                            variant='body2'
-                            sx={{ alignSelf: "center" }}>
-                            Forgot your password?
-                        </Link> */}
                     </Box>
                     <Divider>or</Divider>
                     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
