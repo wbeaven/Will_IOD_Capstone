@@ -1,10 +1,9 @@
 import { Routes, Route } from "react-router";
-import SignIn from "./SignIn.tsx";
-import SignUp from "./SignUp.tsx";
-import App from "./App.tsx";
-import ResponsiveDrawer from "./dashboard.tsx";
-import PageNotFound from "./PageNotFound.tsx";
-import WorkInProgress from "./WorkInProgress.tsx";
+import SignIn from "./pages/SignIn.tsx";
+import SignUp from "./pages/SignUp.tsx";
+import ResponsiveDrawer from "./pages/Dashboard.tsx";
+import PageNotFound from "./pages/PageNotFound.tsx";
+import WorkInProgress from "./pages/WorkInProgress.tsx";
 
 export function AppRoutes() {
     return (
@@ -15,8 +14,6 @@ export function AppRoutes() {
                 <Route path='profile' element={<WorkInProgress />} />
                 <Route path='team' element={<WorkInProgress />} />
             </Route>
-            <Route path='app' element={<App />} />
-            <Route path='responsiveDrawer' element={<ResponsiveDrawer />} />
             <Route path='*' element={<PageNotFound />} />
         </Routes>
     );

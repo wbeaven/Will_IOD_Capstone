@@ -5,14 +5,6 @@ import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import CssBaseline from "@mui/material/CssBaseline";
 
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-
-const darkTheme = createTheme({
-    palette: {
-        mode: "dark",
-    },
-});
-
 function Copyright() {
     return (
         <Typography
@@ -32,7 +24,7 @@ function Copyright() {
 
 export default function PageNotFound() {
     return (
-        <ThemeProvider theme={darkTheme}>
+        <>
             <CssBaseline enableColorScheme />
             <Container maxWidth='sm'>
                 <Box height='97vh'>
@@ -54,6 +46,6 @@ export default function PageNotFound() {
                     </Grid>
                 </Box>
             </Container>
-        </ThemeProvider>
+        </>
     );
 }

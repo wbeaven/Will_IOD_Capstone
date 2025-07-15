@@ -11,9 +11,8 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
-import ForgotPassword from "../components/ForgotPassword";
-import AppTheme from "../shared-theme/AppTheme";
-import ColorModeSelect from "../shared-theme/ColorModeSelect";
+import AppTheme from "../../shared-theme/AppTheme";
+import ColorModeSelect from "../../shared-theme/ColorModeSelect";
 import { useNavigate } from "react-router";
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -24,18 +23,18 @@ const Card = styled(MuiCard)(({ theme }) => ({
     padding: theme.spacing(4),
     gap: theme.spacing(2),
     margin: "auto",
-    [theme.breakpoints.up("sm")]: {
-        maxWidth: "450px",
-    },
     boxShadow:
         "hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px",
+    [theme.breakpoints.up("sm")]: {
+        width: "450px",
+    },
     ...theme.applyStyles("dark", {
         boxShadow:
             "hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px",
     }),
 }));
 
-const SignInContainer = styled(Stack)(({ theme }) => ({
+const SignUpContainer = styled(Stack)(({ theme }) => ({
     height: "calc((1 - var(--template-frame-height, 0)) * 100dvh)",
     minHeight: "100%",
     padding: theme.spacing(2),
@@ -58,20 +57,18 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
     },
 }));
 
-export default function SignIn(props: { disableCustomTheme?: boolean }) {
+export default function SignUp(props: { disableCustomTheme?: boolean }) {
     const [emailError, setEmailError] = React.useState(false);
     const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
     const [passwordError, setPasswordError] = React.useState(false);
     const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
-    const [open, setOpen] = React.useState(false);
-
-    const handleClose = () => {
-        setOpen(false);
-    };
+    const [usernameError, setUsernameError] = React.useState(false);
+    const [usernameErrorMessage, setUsernameErrorMessage] = React.useState("");
 
     const validateInputs = () => {
         const email = document.getElementById("email") as HTMLInputElement;
         const password = document.getElementById("password") as HTMLInputElement;
+        const username = document.getElementById("username") as HTMLInputElement;
 
         let isValid = true;
 
@@ -93,12 +90,21 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
             setPasswordErrorMessage("");
         }
 
+        if (!username.value || username.value.length < 1) {
+            setUsernameError(true);
+            setUsernameErrorMessage("Username is required.");
+            isValid = false;
+        } else {
+            setUsernameError(false);
+            setUsernameErrorMessage("");
+        }
+
         return isValid;
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if (emailError || passwordError) {
+        if (usernameError || emailError || passwordError) {
             return;
         }
         const data = new FormData(event.currentTarget);
@@ -111,10 +117,10 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
             }),
         };
         try {
-            await fetch("http://localhost:8080/auth", fetchData)
+            await fetch("http://localhost:8080/users", fetchData)
                 .then((response) => response.json())
                 .then((json) => console.log(json));
-            navigate(`/dashboard`);
+            navigate("/dashboard/profile");
         } catch (err) {
             console.error("Error: ", err);
         }
@@ -125,83 +131,89 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
     return (
         <AppTheme {...props}>
             <CssBaseline enableColorScheme />
-            <SignInContainer direction='column' justifyContent='space-between'>
-                <ColorModeSelect sx={{ position: "fixed", top: "1rem", right: "1rem" }} />
+            <ColorModeSelect sx={{ position: "fixed", top: "1rem", right: "1rem" }} />
+            <SignUpContainer direction='column' justifyContent='space-between'>
                 <Card variant='outlined'>
                     <Typography
                         component='h1'
                         variant='h4'
                         sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}>
-                        Sign in
+                        Sign up
                     </Typography>
                     <Box
                         component='form'
                         onSubmit={handleSubmit}
-                        noValidate
-                        sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            width: "100%",
-                            gap: 2,
-                        }}>
+                        sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                        <FormControl>
+                            <FormLabel htmlFor='username'>Username</FormLabel>
+                            <TextField
+                                autoComplete='username'
+                                name='username'
+                                required
+                                fullWidth
+                                id='username'
+                                placeholder='cool username'
+                                error={usernameError}
+                                helperText={usernameErrorMessage}
+                                color={usernameError ? "error" : "primary"}
+                            />
+                        </FormControl>
                         <FormControl>
                             <FormLabel htmlFor='email'>Email</FormLabel>
                             <TextField
-                                error={emailError}
-                                helperText={emailErrorMessage}
-                                id='email'
-                                type='email'
-                                name='email'
-                                placeholder='your@email.com'
-                                autoComplete='email'
-                                autoFocus
                                 required
                                 fullWidth
+                                id='email'
+                                placeholder='your@email.com'
+                                name='email'
+                                autoComplete='email'
                                 variant='outlined'
-                                color={emailError ? "error" : "primary"}
+                                error={emailError}
+                                helperText={emailErrorMessage}
+                                color={passwordError ? "error" : "primary"}
                             />
                         </FormControl>
                         <FormControl>
                             <FormLabel htmlFor='password'>Password</FormLabel>
                             <TextField
-                                error={passwordError}
-                                helperText={passwordErrorMessage}
+                                required
+                                fullWidth
                                 name='password'
                                 placeholder='••••••'
                                 type='password'
                                 id='password'
-                                autoComplete='current-password'
-                                autoFocus
-                                required
-                                fullWidth
+                                autoComplete='new-password'
                                 variant='outlined'
+                                error={passwordError}
+                                helperText={passwordErrorMessage}
                                 color={passwordError ? "error" : "primary"}
                             />
                         </FormControl>
-                        <ForgotPassword open={open} handleClose={handleClose} />
                         <Button
                             type='submit'
                             fullWidth
                             variant='contained'
                             onClick={validateInputs}>
-                            Sign in
+                            Sign up
                         </Button>
                     </Box>
-                    <Divider>or</Divider>
+                    <Divider>
+                        <Typography sx={{ color: "text.secondary" }}>or</Typography>
+                    </Divider>
                     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                         <Typography sx={{ textAlign: "center" }}>
-                            Don&apos;t have an account?{" "}
+                            Already have an account?{" "}
                             <Link
                                 component={"button"}
-                                onClick={() => navigate("/signUp")}
+                                onClick={() => navigate("/signIn")}
                                 variant='body2'
                                 sx={{ alignSelf: "center", textDecorationLine: "underline" }}>
-                                Sign up
+                                Sign in
                             </Link>
                         </Typography>
                     </Box>
                 </Card>
-            </SignInContainer>
+            </SignUpContainer>
         </AppTheme>
     );
 }

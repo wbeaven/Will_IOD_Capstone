@@ -4,23 +4,16 @@ import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import CssBaseline from "@mui/material/CssBaseline";
-import ColorModeSelect from "../shared-theme/ColorModeSelect";
-import AppTheme from "../shared-theme/AppTheme";
+import ColorModeSelect from "../../shared-theme/ColorModeSelect";
+import AppTheme from "../../shared-theme/AppTheme";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { ThemeProvider, createTheme } from "@mui/material/styles";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import NightlightRoundSharpIcon from "@mui/icons-material/NightlightRoundSharp";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-
-const darkTheme = createTheme({
-    palette: {
-        mode: "dark",
-    },
-});
 
 const actions = [
     { icon: <Brightness4Icon />, name: "System" },
@@ -46,10 +39,8 @@ function Copyright() {
 }
 
 export default function PageNotFound() {
-    const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-    <div>prefersDarkMode: {prefersDarkMode.toString()}</div>;
     return (
-        <ThemeProvider theme={darkTheme}>
+        <>
             <CssBaseline enableColorScheme />
             <Container maxWidth='sm'>
                 <Box height='97vh'>
@@ -81,6 +72,6 @@ export default function PageNotFound() {
                     </Grid>
                 </Box>
             </Container>
-        </ThemeProvider>
+        </>
     );
 }
