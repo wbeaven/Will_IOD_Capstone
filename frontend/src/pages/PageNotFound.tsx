@@ -4,22 +4,6 @@ import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import CssBaseline from "@mui/material/CssBaseline";
-import ColorModeSelect from "../../shared-theme/ColorModeSelect";
-import AppTheme from "../../shared-theme/AppTheme";
-import useMediaQuery from "@mui/material/useMediaQuery";
-
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import Brightness4Icon from "@mui/icons-material/Brightness4";
-import LightModeIcon from "@mui/icons-material/LightMode";
-import NightlightRoundSharpIcon from "@mui/icons-material/NightlightRoundSharp";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-
-const actions = [
-    { icon: <Brightness4Icon />, name: "System" },
-    { icon: <LightModeIcon />, name: "Light" },
-    { icon: <NightlightRoundSharpIcon />, name: "Dark" },
-];
 
 function Copyright() {
     return (
@@ -52,16 +36,6 @@ export default function PageNotFound() {
                             justifyContent: "center",
                             alignItems: "center",
                         }}>
-                        {/* <SpeedDial
-                            ariaLabel='SpeedDial basic example'
-                            sx={{ position: "absolute", top: 16, right: 16 }}
-                            icon={<SpeedDialIcon />}
-                            direction='down'>
-                            {actions.map((action) => (
-                                <SpeedDialAction key={action.name} icon={action.icon} />
-                            ))}
-                        </SpeedDial> */}
-                        {/* <ColorModeSelect sx={{ position: "fixed", top: "1rem", right: "1rem" }} /> */}
                         <Typography variant='h1' component='h1' sx={{ mb: 2 }} align='center'>
                             404
                         </Typography>

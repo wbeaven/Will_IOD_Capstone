@@ -17,14 +17,18 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SettingsIcon from "@mui/icons-material/Settings";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { Stack, useMediaQuery } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import SearchList from "../components/SearchList";
+import { useNavigate } from "react-router";
+import { Logout } from "../helpers/Logout";
 
 const drawerWidth = 240;
 
 export default function ResponsiveDrawer() {
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [isClosing, setIsClosing] = React.useState(false);
+
+    const navigate = useNavigate();
 
     const handleDrawerClose = () => {
         setIsClosing(true);
@@ -54,7 +58,7 @@ export default function ResponsiveDrawer() {
             <Divider />
             <List>
                 <ListItem disablePadding>
-                    <ListItemButton>
+                    <ListItemButton onClick={() => navigate("/dashboard/profile/:id")}>
                         <ListItemIcon>
                             <AccountCircleIcon />
                         </ListItemIcon>
@@ -62,7 +66,7 @@ export default function ResponsiveDrawer() {
                     </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
-                    <ListItemButton>
+                    <ListItemButton onClick={() => navigate("/dashboard/")}>
                         <ListItemIcon>
                             <DashboardIcon />
                         </ListItemIcon>
@@ -73,7 +77,7 @@ export default function ResponsiveDrawer() {
             <Divider />
             <List>
                 <ListItem disablePadding>
-                    <ListItemButton>
+                    <ListItemButton onClick={() => navigate("/dashboard/teams/")}>
                         <ListItemIcon>
                             <GroupsIcon />
                         </ListItemIcon>
@@ -83,16 +87,14 @@ export default function ResponsiveDrawer() {
             </List>
             <Divider />
             <List>
-                {["Settings"].map((text, index) => (
-                    <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <SettingsIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
+                <ListItem disablePadding>
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <SettingsIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={"Settings"} />
+                    </ListItemButton>
+                </ListItem>
             </List>
         </div>
     );
@@ -118,6 +120,9 @@ export default function ResponsiveDrawer() {
                     <Typography variant='h5' noWrap component='div'>
                         Game Jam Hub
                     </Typography>
+                    <Button variant='contained' sx={{ ml: "auto" }} onClick={Logout()}>
+                        Logout
+                    </Button>
                 </Toolbar>
             </AppBar>
             <Box component='nav' sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
@@ -152,49 +157,11 @@ export default function ResponsiveDrawer() {
                 sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}>
                 <Toolbar />
                 <Box sx={{ display: "flex", flexDirection: "row" }}>
-                    <Stack spacing={2} sx={{ px: 2 }}>
-                        <SearchList label='Search Users' />
-                        <List>
-                            <ListItem>Item 1</ListItem>
-                            <ListItem>Item 2</ListItem>
-                            <ListItem>Item 3</ListItem>
-                        </List>
-                        <Typography sx={{ marginBottom: 2 }}>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus
-                            non enim praesent elementum facilisis leo vel. Risus at ultrices mi
-                            tempus imperdiet. Semper risus in hendrerit gravida rutrum quisque non
-                            tellus. Convallis convallis tellus id interdum velit laoreet id donec
-                            ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl
-                            suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod
-                            quis viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet
-                            proin fermentum leo. Mauris commodo quis imperdiet massa tincidunt. Cras
-                            tincidunt lobortis feugiat vivamus at augue. At augue eget arcu dictum
-                            varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt.
-                            Lorem donec massa sapien faucibus et molestie ac.
-                        </Typography>
+                    <Stack spacing={2} sx={{ px: 2, flex: 1 }}>
+                        <SearchList label='Search Users' type='users' />
                     </Stack>
-                    <Stack spacing={2} sx={{ px: 2 }}>
-                        <SearchList label='Search Teams' />
-                        <List>
-                            <ListItem>Item 1</ListItem>
-                            <ListItem>Item 2</ListItem>
-                            <ListItem>Item 3</ListItem>
-                        </List>
-                        <Typography sx={{ marginBottom: 2 }}>
-                            Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
-                            ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar elementum
-                            integer enim neque volutpat ac tincidunt. Ornare suspendisse sed nisi
-                            lacus sed viverra tellus. Purus sit amet volutpat consequat mauris.
-                            Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-                            vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra
-                            accumsan in. In hendrerit gravida rutrum quisque non tellus orci ac.
-                            Pellentesque nec nam aliquam sem et tortor. Habitant morbi tristique
-                            senectus et. Adipiscing elit duis tristique sollicitudin nibh sit.
-                            Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra
-                            maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin
-                            aliquam ultrices sagittis orci a.
-                        </Typography>
+                    <Stack spacing={2} sx={{ px: 2, flex: 1 }}>
+                        <SearchList label='Search Teams' type='teams' />
                     </Stack>
                 </Box>
             </Box>

@@ -102,7 +102,6 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
             return;
         }
         const data = new FormData(event.currentTarget);
-        console.log("posted form data: " + JSON.stringify(Object.fromEntries(data)));
         let fetchData = {
             method: "POST",
             body: JSON.stringify(Object.fromEntries(data)),
@@ -111,12 +110,19 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
             }),
         };
         try {
-            await fetch("http://localhost:8080/auth", fetchData)
-                .then((response) => response.json())
-                .then((json) => console.log(json));
+            const response = await fetch("http://localhost:8080/auth", fetchData);
+            const json = await response.json();
+
+            if (json.accessToken) {
+                localStorage.setItem("accessToken", json.accessToken);
+            } else {
+                console.error("No access token found in response:", json);
+                return;
+            }
+
             navigate(`/dashboard`);
         } catch (err) {
-            console.error("Error: ", err);
+            console.error("Error:", err);
         }
     };
 

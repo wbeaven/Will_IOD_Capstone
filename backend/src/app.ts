@@ -7,7 +7,12 @@ import authRoute from "./routes/authRoute";
 require("./dbConnect");
 
 const app = express();
-app.use(cors());
+app.use(
+    cors({
+        origin: "http://localhost:5173",
+        credentials: true,
+    })
+);
 app.use(express.json());
 app.use(cookieParser());
 const PORT = 8080;

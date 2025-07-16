@@ -11,8 +11,10 @@ export function AppRoutes() {
             <Route path='signIn' element={<SignIn />} />
             <Route path='signUp' element={<SignUp />} />
             <Route path='dashboard' element={<ResponsiveDrawer />}>
-                <Route path='profile' element={<WorkInProgress />} />
-                <Route path='team' element={<WorkInProgress />} />
+                <Route path='profile/:id' element={<WorkInProgress />} />
+                <Route path='teams' element={<WorkInProgress />}>
+                    <Route path=':id' element={<WorkInProgress />} />
+                </Route>
             </Route>
             <Route path='*' element={<PageNotFound />} />
         </Routes>

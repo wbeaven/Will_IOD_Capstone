@@ -117,10 +117,17 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
             }),
         };
         try {
-            await fetch("http://localhost:8080/users", fetchData)
-                .then((response) => response.json())
-                .then((json) => console.log(json));
-            navigate("/dashboard/profile");
+            const response = await fetch("http://localhost:8080/users", fetchData);
+            const json = await response.json();
+
+            if (json.accessToken) {
+                localStorage.setItem("accessToken", json.accessToken);
+            } else {
+                console.error("No access token found in response:", json);
+                return;
+            }
+
+            navigate("/dashboard");
         } catch (err) {
             console.error("Error: ", err);
         }
