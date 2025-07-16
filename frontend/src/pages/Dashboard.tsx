@@ -19,7 +19,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { Button, Stack } from "@mui/material";
 import SearchList from "../components/SearchList";
-import { useNavigate } from "react-router";
+import { Outlet, useNavigate, useLocation } from "react-router";
 import { Logout } from "../helpers/Logout";
 
 const drawerWidth = 240;
@@ -29,6 +29,9 @@ export default function ResponsiveDrawer() {
     const [isClosing, setIsClosing] = React.useState(false);
 
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const showSearchLists = /^\/dashboard\/?$/.test(location.pathname);
 
     const handleDrawerClose = () => {
         setIsClosing(true);
@@ -48,12 +51,7 @@ export default function ResponsiveDrawer() {
     const drawer = (
         <div>
             <Toolbar sx={{ justifyContent: "center" }}>
-                <img
-                    src='./src/assets/Capstone_Icon_Large.png'
-                    alt='Site logo'
-                    loading='lazy'
-                    width={"30%"}
-                />
+                <img src='./Capstone_Icon_Large.png' alt='Site logo' loading='lazy' width={"30%"} />
             </Toolbar>
             <Divider />
             <List>
@@ -117,10 +115,29 @@ export default function ResponsiveDrawer() {
                         sx={{ mr: 2, display: { sm: "none" } }}>
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant='h5' noWrap component='div'>
+                    <Typography
+                        variant='h4'
+                        noWrap
+                        component='div'
+                        color='#e2511f'
+                        sx={{
+                            background: `linear-gradient(to bottom right, ${"red"}, ${"orange"})`,
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                            fontWeight: "bold",
+                        }}>
                         Game Jam Hub
                     </Typography>
-                    <Button variant='contained' sx={{ ml: "auto" }} onClick={Logout()}>
+                    <Button
+                        variant='contained'
+                        sx={{
+                            ml: "auto",
+                            background: `linear-gradient(to bottom right, ${"red"}, ${"orange"})`,
+                            "&:hover": {
+                                background: `linear-gradient(to bottom right, ${"darkRed"}, ${"orangeRed"})`,
+                            },
+                        }}
+                        onClick={Logout()}>
                         Logout
                     </Button>
                 </Toolbar>
@@ -156,14 +173,17 @@ export default function ResponsiveDrawer() {
                 component='main'
                 sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}>
                 <Toolbar />
-                <Box sx={{ display: "flex", flexDirection: "row" }}>
-                    <Stack spacing={2} sx={{ px: 2, flex: 1 }}>
-                        <SearchList label='Search Users' type='users' />
-                    </Stack>
-                    <Stack spacing={2} sx={{ px: 2, flex: 1 }}>
-                        <SearchList label='Search Teams' type='teams' />
-                    </Stack>
-                </Box>
+                <Outlet />
+                {showSearchLists && (
+                    <Box sx={{ display: "flex", flexDirection: "row" }}>
+                        <Stack spacing={2} sx={{ px: 2, flex: 1 }}>
+                            <SearchList label='Search Users' type='users' />
+                        </Stack>
+                        <Stack spacing={2} sx={{ px: 2, flex: 1 }}>
+                            <SearchList label='Search Teams' type='teams' />
+                        </Stack>
+                    </Box>
+                )}
             </Box>
         </Box>
     );

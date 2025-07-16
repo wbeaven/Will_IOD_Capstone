@@ -27,7 +27,7 @@ export const handleLogin = async (req: Request, res: Response): Promise<void> =>
     }
 
     const userPayload: TokenPayload = {
-        userId: user._id as Types.ObjectId,
+        id: user._id as string,
         username: user.username,
     };
 

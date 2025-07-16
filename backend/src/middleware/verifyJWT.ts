@@ -1,9 +1,13 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
-import { TokenPayload } from "../common/token";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 export interface AuthenticatedRequest extends Request {
-    user?: TokenPayload;
+    user?: {
+        id?: string;
+        username?: string;
+    };
 }
 
 export const verifyJWT = (req: Request, res: Response, next: NextFunction): void => {
@@ -14,13 +18,29 @@ export const verifyJWT = (req: Request, res: Response, next: NextFunction): void
     }
 
     const token = authHeader.split(" ")[1];
+    if (!token) {
+        res.sendStatus(401);
+        return;
+    }
 
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string, (err, decoded) => {
+    const secret = process.env.ACCESS_TOKEN_SECRET;
+    if (!secret) {
+        throw new Error("ACCESS_TOKEN_SECRET not set");
+    }
+
+    jwt.verify(token, secret, (err, decoded) => {
         if (err || !decoded || typeof decoded !== "object") {
             return res.sendStatus(403);
         }
 
-        (req as AuthenticatedRequest).user = decoded as TokenPayload;
+        const { id, username } = decoded as any;
+
+        if (!id) {
+            return res.sendStatus(403);
+        }
+
+        (req as AuthenticatedRequest).user = { id, username };
+
         next();
     });
 };

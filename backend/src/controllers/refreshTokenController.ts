@@ -34,8 +34,8 @@ export const handleRefreshToken = async (req: Request, res: Response): Promise<v
                 return;
             }
 
-            const { userId, username } = decoded as TokenPayload;
-            const accessToken = generateAccessToken({ userId, username });
+            const { id, username } = decoded as TokenPayload;
+            const accessToken = generateAccessToken({ id, username });
 
             res.json({ accessToken });
         }

@@ -1,7 +1,13 @@
 import { Request, Response } from "express";
-import bcrypt from "bcrypt";
-
 import { teamModel, ITeam } from "../models/teamModel";
+import { userModel } from "../models/userModel";
+import { AuthenticatedRequest } from "../middleware/verifyJWT";
+import { Types } from "mongoose";
+
+interface ITeamCreateInput {
+    teamName: string;
+    jamName: string;
+}
 
 export const getTeams = (req: Request, res: Response) => {
     teamModel
@@ -13,13 +19,29 @@ export const getTeams = (req: Request, res: Response) => {
         });
 };
 
-export const createTeam = async (req: Request, res: Response) => {
+export const createTeam = async (req: AuthenticatedRequest, res: Response) => {
     try {
-        const data: ITeam = req.body;
-        if (!data.teamName) {
-            return res.status(400).send({ result: 400, error: "Team name is required" });
+        const data: ITeamCreateInput = req.body;
+        if (!data.teamName || !data.jamName) {
+            return res
+                .status(400)
+                .send({ result: 400, error: "Team name and jam name are required" });
         }
-        const newTeam = await new teamModel(data).save();
+        const adminId = req.user?.id;
+        if (!adminId) {
+            return res.status(401).send({ result: 401, error: "Unauthorized" });
+        }
+
+        const newTeam = await new teamModel({
+            teamName: data.teamName,
+            jamName: data.jamName,
+            admin: new Types.ObjectId(adminId),
+            members: [new Types.ObjectId(adminId)],
+        }).save();
+        await userModel.findByIdAndUpdate(adminId, {
+            $push: { teams: newTeam._id },
+        });
+
         res.send({ result: 200, data: newTeam });
     } catch (err: any) {
         console.log(err);
@@ -49,12 +71,36 @@ export const deleteTeam = (req: Request, res: Response) => {
         });
 };
 
-// export const getMe = (req: AuthenticatedRequest, res: Response): void => {
-//     if (!req.user) {
-//         res.status(401).json({ message: "Not authenticated" });
-//         return;
-//     }
-//     const userObj = typeof req.user.toObject === "function" ? req.user.toObject() : req.user;
-//     if (userObj.password) delete userObj.password;
-//     res.json(userObj);
-// };
+export const getOneTeam = async (req: Request, res: Response) => {
+    try {
+        const team = await teamModel.findById(req.params.id);
+        if (!team) {
+            res.status(404).json({ error: "Team not found" });
+            return;
+        }
+
+        res.json({ result: 200, data: team });
+    } catch (err: any) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+export const getUserTeams = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+    try {
+        if (!req.user?.id) {
+            res.status(401).json({ result: 401, error: "Unauthorized" });
+            return;
+        }
+
+        const user = await userModel.findById(req.user.id).populate("teams");
+        if (!user) {
+            res.status(404).json({ result: 404, error: "User not found" });
+            return;
+        }
+
+        res.status(200).json({ result: 200, data: user.teams });
+    } catch (err: any) {
+        console.error(err);
+        res.status(500).json({ result: 500, error: err.message });
+    }
+};

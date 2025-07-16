@@ -45,6 +45,7 @@ const teamSchema = new Schema<ITeam>(
         admin: {
             type: Schema.Types.ObjectId,
             ref: "user",
+            required: true,
         },
         createdAt: {
             type: Date,
