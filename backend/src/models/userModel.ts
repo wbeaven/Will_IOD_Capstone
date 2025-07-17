@@ -6,7 +6,12 @@ export interface IUser extends Document {
     password: string;
     description: string;
     roles: string[];
-    screenshots: any[];
+    screenshots: {
+        img: {
+            data: any;
+            contentType: string;
+        };
+    }[];
     teams: Types.ObjectId[];
     refreshToken?: string;
     createdAt: Date;

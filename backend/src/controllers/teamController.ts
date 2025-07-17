@@ -50,6 +50,11 @@ export const createTeam = async (req: AuthenticatedRequest, res: Response) => {
 };
 
 export const updateTeam = (req: Request, res: Response) => {
+    const { teamName, jamName } = req.body;
+    if (!teamName?.trim() || !jamName?.trim()) {
+        res.status(400).send({ result: 400, error: "Team name and Jam name are required" });
+        return;
+    }
     teamModel
         .findByIdAndUpdate(req.params.id, req.body, {
             new: true,
@@ -73,12 +78,11 @@ export const deleteTeam = (req: Request, res: Response) => {
 
 export const getOneTeam = async (req: Request, res: Response) => {
     try {
-        const team = await teamModel.findById(req.params.id);
+        const team = await teamModel.findById(req.params.id).populate("members", "username");
         if (!team) {
             res.status(404).json({ error: "Team not found" });
             return;
         }
-
         res.json({ result: 200, data: team });
     } catch (err: any) {
         res.status(500).json({ error: err.message });
@@ -102,5 +106,38 @@ export const getUserTeams = async (req: AuthenticatedRequest, res: Response): Pr
     } catch (err: any) {
         console.error(err);
         res.status(500).json({ result: 500, error: err.message });
+    }
+};
+
+export const updateTeamMembers = async (req: Request, res: Response): Promise<void> => {
+    const teamId = req.params.id;
+    const { userId } = req.body;
+
+    if (!userId) {
+        res.status(400).json({ result: 400, error: "User ID is required" });
+        return;
+    }
+
+    try {
+        const updatedTeam = await teamModel.findByIdAndUpdate(
+            teamId,
+            { $addToSet: { members: userId } },
+            { new: true }
+        );
+
+        if (!updatedTeam) {
+            res.status(404).json({ result: 404, error: "Team not found" });
+            return;
+        }
+        if (userId) {
+            await userModel.findByIdAndUpdate(userId, {
+                $addToSet: { teams: updatedTeam._id },
+            });
+        }
+
+        res.json({ result: 200, data: updatedTeam });
+    } catch (err) {
+        console.error("Error updating team members:", err);
+        res.status(500).json({ result: 500, error: "Internal server error" });
     }
 };

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 
-export const Logout = () => {
+export const useLogout = () => {
     const navigate = useNavigate();
 
     const logout = async () => {

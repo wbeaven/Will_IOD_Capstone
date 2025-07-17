@@ -6,7 +6,6 @@ import PageNotFound from "./pages/PageNotFound.tsx";
 import Profile from "./pages/Profile.tsx";
 import TeamHub from "./pages/TeamHub.tsx";
 import Team from "./pages/Team.tsx";
-// import WorkInProgress from "./pages/WorkInProgress.tsx";
 
 export function AppRoutes() {
     return (

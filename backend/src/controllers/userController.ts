@@ -57,13 +57,8 @@ export const deleteUser = (req: Request, res: Response) => {
         });
 };
 
-export const getOneUser = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+export const getOneUser = async (req: Request, res: Response): Promise<void> => {
     try {
-        if (!req.user?.id || req.params.id !== req.user.id.toString()) {
-            res.status(403).json({ error: "Unauthorized" });
-            return;
-        }
-
         const user = await userModel.findById(req.params.id);
         if (!user) {
             res.status(404).json({ error: "User not found" });

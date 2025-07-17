@@ -1,7 +1,6 @@
 import { List, ListItem, TextField, Card, CardContent, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { useAuthVerify } from "../hooks/useAuthVerify";
 
 interface SearchListProps {
     label: string;
@@ -11,7 +10,6 @@ interface SearchListProps {
 export default function SearchList({ label, type }: SearchListProps) {
     const [items, setItems] = useState([]);
     const navigate = useNavigate();
-    useAuthVerify();
 
     const handleList = async () => {
         const accessToken = localStorage.getItem("accessToken");

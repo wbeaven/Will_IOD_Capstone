@@ -6,6 +6,7 @@ import {
     deleteTeam,
     getOneTeam,
     getUserTeams,
+    updateTeamMembers,
 } from "../controllers/teamController";
 import { verifyJWT } from "../middleware/verifyJWT";
 
@@ -19,5 +20,6 @@ router.put("/:id", verifyJWT, updateTeam);
 router.delete("/:id", verifyJWT, deleteTeam);
 router.get("/me", verifyJWT, getUserTeams);
 router.get("/:id", verifyJWT, getOneTeam);
+router.put("/:id/join", verifyJWT, updateTeamMembers);
 
 export default router;

@@ -20,7 +20,8 @@ import Typography from "@mui/material/Typography";
 import { Button, Stack } from "@mui/material";
 import SearchList from "../components/SearchList";
 import { Outlet, useNavigate, useLocation } from "react-router";
-import { Logout } from "../helpers/Logout";
+import { useLogout } from "../hooks/useLogout";
+import { useAuthVerify } from "../hooks/useAuthVerify";
 
 const drawerWidth = 240;
 
@@ -28,6 +29,7 @@ export default function ResponsiveDrawer() {
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [isClosing, setIsClosing] = React.useState(false);
 
+    useAuthVerify();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -48,6 +50,31 @@ export default function ResponsiveDrawer() {
         }
     };
 
+    const LogoutButton = () => {
+        const logout = useLogout();
+
+        return (
+            <Button
+                variant='contained'
+                sx={{
+                    ml: "auto",
+                    background: `linear-gradient(to bottom right, ${"red"}, ${"orange"})`,
+                    "&:hover": {
+                        background: `linear-gradient(to bottom right, ${"darkRed"}, ${"orangeRed"})`,
+                    },
+                }}
+                onClick={logout}>
+                Logout
+            </Button>
+        );
+    };
+
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+        return;
+    }
+    const decodedUser = JSON.parse(atob(token.split(".")[1]));
+
     const drawer = (
         <div>
             <Toolbar sx={{ justifyContent: "center" }}>
@@ -56,7 +83,8 @@ export default function ResponsiveDrawer() {
             <Divider />
             <List>
                 <ListItem disablePadding>
-                    <ListItemButton onClick={() => navigate("/dashboard/profile/:id")}>
+                    <ListItemButton
+                        onClick={() => navigate(`/dashboard/profile/${decodedUser.id}`)}>
                         <ListItemIcon>
                             <AccountCircleIcon />
                         </ListItemIcon>
@@ -128,18 +156,7 @@ export default function ResponsiveDrawer() {
                         }}>
                         Game Jam Hub
                     </Typography>
-                    <Button
-                        variant='contained'
-                        sx={{
-                            ml: "auto",
-                            background: `linear-gradient(to bottom right, ${"red"}, ${"orange"})`,
-                            "&:hover": {
-                                background: `linear-gradient(to bottom right, ${"darkRed"}, ${"orangeRed"})`,
-                            },
-                        }}
-                        onClick={Logout()}>
-                        Logout
-                    </Button>
+                    <LogoutButton />
                 </Toolbar>
             </AppBar>
             <Box component='nav' sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
