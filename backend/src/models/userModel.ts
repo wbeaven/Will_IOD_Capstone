@@ -8,7 +8,7 @@ export interface IUser extends Document {
     roles: string[];
     screenshots: {
         img: {
-            data: any;
+            data: Buffer;
             contentType: string;
         };
     }[];

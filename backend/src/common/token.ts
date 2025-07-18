@@ -19,7 +19,7 @@ export const generateAccessToken = (payload: TokenPayload): string => {
             username: payload.username,
         },
         ACCESS_TOKEN_SECRET,
-        { expiresIn: "15m" }
+        { expiresIn: "30m" }
     );
 };
 

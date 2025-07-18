@@ -78,7 +78,9 @@ export const deleteTeam = (req: Request, res: Response) => {
 
 export const getOneTeam = async (req: Request, res: Response) => {
     try {
-        const team = await teamModel.findById(req.params.id).populate("members", "username");
+        const team = await teamModel
+            .findById(req.params.id)
+            .populate({ path: "members", select: "username roles" });
         if (!team) {
             res.status(404).json({ error: "Team not found" });
             return;
@@ -96,7 +98,9 @@ export const getUserTeams = async (req: AuthenticatedRequest, res: Response): Pr
             return;
         }
 
-        const user = await userModel.findById(req.user.id).populate("teams");
+        const user = await userModel
+            .findById(req.user.id)
+            .populate({ path: "teams", populate: { path: "members", model: "user" } });
         if (!user) {
             res.status(404).json({ result: 404, error: "User not found" });
             return;

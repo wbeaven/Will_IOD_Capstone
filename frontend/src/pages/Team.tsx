@@ -1,11 +1,11 @@
 import {
     Box,
     Button,
+    Card,
     Chip,
     Dialog,
     DialogActions,
     DialogContent,
-    DialogContentText,
     DialogTitle,
     InputLabel,
     MenuItem,
@@ -16,6 +16,7 @@ import {
 import Select, { type SelectChangeEvent } from "@mui/material/Select";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import { useNavigate } from "react-router";
 
 export default function Team() {
     const { id } = useParams();
@@ -24,6 +25,8 @@ export default function Team() {
     const [open, setOpen] = useState(false);
     const [filledRoles, setFilledRoles] = useState<string[]>([]);
     const [availableRoles, setAvailableRoles] = useState<string[]>([]);
+
+    const navigate = useNavigate();
 
     const handleClickOpen = () => {
         setFilledRoles(team?.filledRoles || []);
@@ -289,11 +292,26 @@ export default function Team() {
             <Typography variant='h4' mt={3}>
                 Members
             </Typography>
-            <Typography mt={2}>
-                {team.members?.length > 0
-                    ? team.members.map((m: any) => m.username || m.toString()).join(", ")
-                    : "No members yet"}
-            </Typography>
+            {Array.isArray(team.members) &&
+                team.members.map((member: any, index: number) => (
+                    <Card
+                        key={index}
+                        onClick={() => navigate(`/dashboard/profile/${member._id}`)}
+                        sx={{
+                            width: "25%",
+                            p: 2,
+                            m: 1,
+                            cursor: "pointer",
+                            "&:hover": {
+                                bgcolor: "#090909",
+                            },
+                        }}>
+                        <Typography variant='h6'>{member.username}</Typography>
+                        <Typography variant='body2' color='text.secondary' sx={{ float: "right" }}>
+                            Roles: {member.roles?.length ? member.roles.join(", ") : "No roles"}
+                        </Typography>
+                    </Card>
+                ))}
 
             <Typography variant='h4' mt={3}>
                 Filled Roles

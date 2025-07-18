@@ -62,11 +62,6 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
     const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
     const [passwordError, setPasswordError] = React.useState(false);
     const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
-    const [open, setOpen] = React.useState(false);
-
-    const handleClose = () => {
-        setOpen(false);
-    };
 
     const validateInputs = () => {
         const email = document.getElementById("email") as HTMLInputElement;

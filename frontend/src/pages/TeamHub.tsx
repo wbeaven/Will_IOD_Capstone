@@ -143,14 +143,27 @@ export default function TeamHub() {
                                 minHeight: 200,
                                 m: 2,
                                 cursor: "pointer",
+                                "&:hover": {
+                                    bgcolor: "#090909",
+                                },
                             }}>
                             <CardContent>
                                 <Typography variant='h6'>{team.teamName}</Typography>
-                                <Typography variant='h6'>{team.jamName}</Typography>
-                                <Typography variant='body2' color='text.secondary'>
+                                <Typography variant='h6' pt={1}>
+                                    {team.jamName}
+                                </Typography>
+                                <Typography variant='body2' pt={2} color='text.secondary'>
                                     {team.filledRoles && team.filledRoles.length > 0
                                         ? `Roles: ${team.filledRoles.join(", ")}`
                                         : "No roles"}
+                                </Typography>
+                                <Typography variant='body2' pt={2} color='text.secondary'>
+                                    Members:{" "}
+                                    {team.members && team.members.length > 0
+                                        ? team.members
+                                              .map((member: any) => member.username)
+                                              .join(", ")
+                                        : "No members"}
                                 </Typography>
                             </CardContent>
                         </Card>
